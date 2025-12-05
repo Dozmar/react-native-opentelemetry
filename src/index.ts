@@ -10,7 +10,6 @@ export { context, SpanStatusCode, trace } from "@opentelemetry/api";
 
 export { useOpenTelemetry } from "./context";
 
-export { initializeOpenTelemetry } from "./initializer";
 export type { OpenTelemetryProviderProps } from "./OpenTelemetryProvider";
 export { OpenTelemetryProvider } from "./OpenTelemetryProvider";
 export type { OpenTelemetryConfig, OpenTelemetryContextValue } from "./types";

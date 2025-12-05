@@ -174,14 +174,6 @@ Hook for accessing the OpenTelemetry context. Must be used inside `OpenTelemetry
 }
 ```
 
-### `initializeOpenTelemetry(config)`
-
-Function for programmatic initialization of OpenTelemetry without using the provider.
-
-**Parameters:**
-
-- `config: OpenTelemetryConfig` - OpenTelemetry configuration
-
 ### Usage Examples
 
 #### Basic Usage
@@ -257,19 +249,6 @@ function performOperation() {
     span.end();
   }
 }
-```
-
-#### Programmatic Initialization
-
-```tsx
-import { initializeOpenTelemetry } from "@dozmar/react-native-opentelemetry";
-
-await initializeOpenTelemetry({
-  endpoint: "https://otel-collector.example.com/v1/traces",
-  serviceName: "my-app",
-  serviceVersion: "1.0.0",
-  debug: true,
-});
 ```
 
 ## 🛠️ Development

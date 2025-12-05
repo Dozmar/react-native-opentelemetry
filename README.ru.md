@@ -263,20 +263,6 @@ function MyComponent() {
 }
 ```
 
-#### Программная инициализация (без провайдера)
-
-```tsx
-import { initializeOpenTelemetry } from "@dozmar/react-native-opentelemetry";
-
-// Инициализация при старте приложения
-await initializeOpenTelemetry({
-  endpoint: "https://otel-collector.example.com/v1/traces",
-  serviceName: "my-app",
-  serviceVersion: "1.0.0",
-  debug: true,
-});
-```
-
 ## 🔧 API Reference
 
 ### `OpenTelemetryProvider`
@@ -320,29 +306,6 @@ React компонент-провайдер для инициализации Op
 ```tsx
 const { initialized, getTracer } = useOpenTelemetry();
 const tracer = getTracer("my-tracer", "1.0.0");
-```
-
-### `initializeOpenTelemetry(config)`
-
-Функция для программной инициализации OpenTelemetry без использования провайдера.
-
-**Параметры:**
-
-- `config: OpenTelemetryConfig` - Конфигурация OpenTelemetry
-
-**Возвращает:**
-
-- `Promise<void>` - Промис, который разрешается после инициализации
-
-**Пример:**
-
-```tsx
-import { initializeOpenTelemetry } from "@dozmar/react-native-opentelemetry";
-
-await initializeOpenTelemetry({
-  endpoint: "https://otel-collector.example.com/v1/traces",
-  serviceName: "my-app",
-});
 ```
 
 ### Экспортируемые типы и функции
