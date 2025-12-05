@@ -3,39 +3,48 @@
 [![npm version](https://badge.fury.io/js/%40dozmar%2Freact-native-opentelemetry.svg)](https://badge.fury.io/js/%40dozmar%2Freact-native-opentelemetry)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Профессиональная интеграция OpenTelemetry для React Native приложений. Легко настраиваемая библиотека для сбора трейсов и метрик в ваших мобильных приложениях.
+Professional OpenTelemetry integration for React Native applications. An easily configurable library for collecting traces and metrics in your mobile applications.
 
-## ✨ Преимущества
+## ✨ Features
 
-- 🚀 **Простая интеграция** - Настройка за несколько минут с помощью React компонента-провайдера
-- 📊 **Автоматическая инструментация** - Автоматический сбор трейсов для fetch и XMLHttpRequest запросов
-- 🔧 **Гибкая конфигурация** - Полный контроль над настройками OpenTelemetry
-- 📱 **Информация об устройстве** - Автоматический сбор информации об устройстве и ОС
-- 🎯 **TypeScript поддержка** - Полная типизация для лучшего DX
-- 🔒 **Production-ready** - Готово к использованию в production окружении
+- 🚀 **Easy Integration** - Set up in minutes with a React provider component
+- 📊 **Automatic Instrumentation** - Automatic trace collection for fetch and XMLHttpRequest requests
+- 🔧 **Flexible Configuration** - Full control over OpenTelemetry settings
+- 📱 **Device Information** - Support for automatic collection of device and OS information
+- 🎯 **TypeScript Support** - Full typing for better DX
+- 🔒 **Production-ready** - Ready for use in production environments
+- 🐛 **Debug Mode** - Built-in support for debug logging
 
-## 📦 Установка
+## 📦 Installation
 
 ```bash
-# Используя npm
+# Using npm
 npm install @dozmar/react-native-opentelemetry
 
-# Используя yarn
+# Using yarn
 yarn add @dozmar/react-native-opentelemetry
 
+# Using pnpm
+pnpm add @dozmar/react-native-opentelemetry
 ```
 
-### Дополнительные зависимости
+### Peer Dependencies
 
-Библиотека требует установки следующих peer dependencies:
+The library requires the following peer dependencies:
+
+```bash
+npm install react react-native
+```
+
+For device information collection (optional):
 
 ```bash
 npm install react-native-device-info
 ```
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### 1. Оберните ваше приложение в провайдер
+### 1. Wrap your application with the provider
 
 ```tsx
 import { OpenTelemetryProvider } from "@dozmar/react-native-opentelemetry";
@@ -56,10 +65,10 @@ export default function Root() {
 }
 ```
 
-### 2. Используйте хук для доступа к tracer
+### 2. Use the hook to access the tracer
 
 ```tsx
-import { useOpenTelemetry, trace } from "@dozmar/react-native-opentelemetry";
+import { useOpenTelemetry, trace, SpanStatusCode } from "@dozmar/react-native-opentelemetry";
 
 function MyComponent() {
   const { initialized, getTracer } = useOpenTelemetry();
@@ -67,203 +76,86 @@ function MyComponent() {
 
   const handleAction = () => {
     const span = tracer.startSpan("my-action");
-    // Ваш код
-    span.end();
+    try {
+      // Your code
+      span.setStatus({ code: SpanStatusCode.OK });
+    } catch (error) {
+      span.setStatus({ 
+        code: SpanStatusCode.ERROR,
+        message: error.message 
+      });
+      span.recordException(error);
+    } finally {
+      span.end();
+    }
   };
 
   return <Button onPress={handleAction} />;
 }
 ```
 
-## 📚 Документация
+## 📚 Documentation
 
-### Конфигурация
+For detailed API documentation and examples, see:
 
-`OpenTelemetryProvider` принимает объект конфигурации со следующими параметрами:
+- **[English Documentation](README.en.md)** - Complete API reference and usage examples
+- **[Русская Документация](README.ru.md)** - Полная документация API и примеры использования
 
-```typescript
-interface OpenTelemetryConfig {
-  // URL для отправки трейсов в OTLP endpoint (обязательно)
-  endpoint: string;
+## 🛠️ Development
 
-  // Имя сервиса для идентификации в трейсах (обязательно)
-  serviceName: string;
-
-  // Версия сервиса (опционально)
-  serviceVersion?: string;
-
-  // Дополнительные атрибуты ресурса (опционально)
-  resourceAttributes?: DetectedResourceAttributes;
-
-  // Задержка перед отправкой батча трейсов в миллисекундах (по умолчанию: 500)
-  scheduledDelayMillis?: number;
-
-  // URL паттерны для игнорирования при инструментации XMLHttpRequest (опционально)
-  ignoreUrls?: (string | RegExp)[];
-
-  // Дополнительные span процессоры (опционально)
-  spanProcessors?: SpanProcessor[];
-
-  // Дополнительные инструментации (опционально)
-  instrumentations?: Instrumentation[];
-
-  // Включить автоматическую инструментацию fetch (по умолчанию: true)
-  enableFetchInstrumentation?: boolean;
-
-  // Включить автоматическую инструментацию XMLHttpRequest (по умолчанию: true)
-  enableXMLHttpRequestInstrumentation?: boolean;
-
-  // Включить автоматический сбор информации об устройстве (по умолчанию: true)
-  enableDeviceInfo?: boolean;
-}
-```
-
-### Примеры использования
-
-#### Базовое использование
-
-```tsx
-<OpenTelemetryProvider
-  config={{
-    endpoint: "http://localhost:4318/v1/traces",
-    serviceName: "my-app",
-  }}
->
-  <App />
-</OpenTelemetryProvider>
-```
-
-#### Расширенная конфигурация
-
-```tsx
-<OpenTelemetryProvider
-  config={{
-    endpoint: "https://otel-collector.example.com/v1/traces",
-    serviceName: "my-app",
-    serviceVersion: "1.2.3",
-    scheduledDelayMillis: 1000,
-    ignoreUrls: [/\/api\/health/],
-    enableDeviceInfo: true,
-    resourceAttributes: {
-      "environment": "production",
-      "team": "mobile",
-    },
-  }}
-  loadingComponent={<LoadingScreen />}
-  onError={(error) => console.error("OTel init error:", error)}
->
-  <App />
-</OpenTelemetryProvider>
-```
-
-#### Создание кастомных трейсов
-
-```tsx
-import { trace } from "@dozmar/react-native-opentelemetry";
-
-function performOperation() {
-  const tracer = trace.getTracer("my-tracer");
-  const span = tracer.startSpan("operation-name");
-
-  try {
-    // Ваш код
-    span.setStatus({ code: SpanStatusCode.OK });
-  } catch (error) {
-    span.setStatus({ 
-      code: SpanStatusCode.ERROR,
-      message: error.message 
-    });
-    span.recordException(error);
-  } finally {
-    span.end();
-  }
-}
-```
-
-## 🔧 API Reference
-
-### `OpenTelemetryProvider`
-
-React компонент-провайдер для инициализации OpenTelemetry.
-
-**Props:**
-
-- `config: OpenTelemetryConfig` - Конфигурация OpenTelemetry
-- `children: ReactNode` - Дочерние компоненты
-- `loadingComponent?: ReactNode` - Компонент, показываемый во время инициализации
-- `onError?: (error: Error) => void` - Обработчик ошибок инициализации
-
-### `useOpenTelemetry()`
-
-Хук для доступа к контексту OpenTelemetry.
-
-**Returns:**
-
-```typescript
-{
-  initialized: boolean;
-  getTracer: (name: string, version?: string) => Tracer;
-}
-```
-
-### `initializeOpenTelemetry(config)`
-
-Функция для программной инициализации OpenTelemetry (без использования провайдера).
-
-## 🛠️ Разработка
-
-### Требования
+### Requirements
 
 - Node.js >= 18
 - Yarn >= 4.0
 - React Native >= 0.70
 
-### Установка зависимостей
+### Installing Dependencies
 
 ```bash
 yarn install
 ```
 
-### Запуск линтера
+### Running Linter
 
 ```bash
 yarn lint
 ```
 
-### Запуск проверки типов
+### Running Type Check
 
 ```bash
 yarn typecheck
 ```
 
-### Запуск тестов
+### Running Tests
 
 ```bash
 yarn test
 ```
 
-### Запуск примера
+### Running Example
 
 ```bash
 cd example
 yarn install
-yarn ios  # или yarn android
+yarn ios  # or yarn android
 ```
 
-## 📝 Лицензия
+## 📝 License
 
 MIT
 
-## 🤝 Вклад
+## 🤝 Contributing
 
-Мы приветствуем вклад! Пожалуйста, прочитайте [CONTRIBUTING.md](CONTRIBUTING.md) для деталей.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
-## 🔗 Полезные ссылки
+## 🔗 Useful Links
 
 - [OpenTelemetry Documentation](https://opentelemetry.io/docs/)
 - [React Native Documentation](https://reactnative.dev/)
-- [Пример использования](example/)
+- [Usage Example](example/)
+- [GitHub Repository](https://github.com/Dozmar/react-native-opentelemetry)
 
 ## 📄 Changelog
 
-Смотрите [CHANGELOG.md](CHANGELOG.md) для списка изменений.
+See [CHANGELOG.md](CHANGELOG.md) for a list of changes.
