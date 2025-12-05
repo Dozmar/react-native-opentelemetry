@@ -5,7 +5,7 @@ export type {
 	SpanStatus,
 	Tracer,
 } from "@opentelemetry/api";
-// Re-export OpenTelemetry API для удобства использования
+
 export { context, SpanStatusCode, trace } from "@opentelemetry/api";
 
 export { useOpenTelemetry } from "./context";

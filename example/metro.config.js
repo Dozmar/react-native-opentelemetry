@@ -8,12 +8,6 @@ const __dirname = path.dirname(__filename);
 
 const root = path.resolve(__dirname, "..");
 
-/**
- * Metro configuration
- * https://facebook.github.io/metro/docs/configuration
- *
- * @type {import('metro-config').MetroConfig}
- */
 const config = withMetroConfig(getDefaultConfig(__dirname), {
 	root,
 	dirname: __dirname,

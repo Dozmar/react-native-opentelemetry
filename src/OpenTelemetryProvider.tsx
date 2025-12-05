@@ -49,7 +49,7 @@ export function OpenTelemetryProvider({
 					onError(error);
 				}
 				if (mounted) {
-					setInitialized(true); // Show UI even on error
+					setInitialized(true);
 				}
 			});
 
