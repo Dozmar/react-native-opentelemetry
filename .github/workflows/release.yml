@@ -75,9 +75,24 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        continue-on-error: false
+
+      - name: Check if release exists
+        id: check_release
+        if: steps.publish_npm.outcome == 'success'
+        run: |
+          if gh release view "v${{ steps.package_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Release v${{ steps.package_version.outputs.version }} already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Release v${{ steps.package_version.outputs.version }} does not exist, will create"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
-        if: steps.check_tag.outputs.exists == 'false' && steps.publish_npm.outcome == 'success'
+        if: steps.publish_npm.outcome == 'success' && steps.check_release.outputs.exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.package_version.outputs.version }}

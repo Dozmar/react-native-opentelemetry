@@ -1,6 +1,6 @@
-# @react-native-community/opentelemetry
+# @dozmar/react-native-opentelemetry
 
-[![npm version](https://badge.fury.io/js/%40react-native-community%2Fopentelemetry.svg)](https://badge.fury.io/js/%40react-native-community%2Fopentelemetry)
+[![npm version](https://badge.fury.io/js/%40dozmar%2Freact-native-opentelemetry.svg)](https://badge.fury.io/js/%40dozmar%2Freact-native-opentelemetry)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Профессиональная интеграция OpenTelemetry для React Native приложений. Легко настраиваемая библиотека для сбора трейсов и метрик в ваших мобильных приложениях.
@@ -18,10 +18,10 @@
 
 ```bash
 # Используя npm
-npm install @react-native-community/opentelemetry
+npm install @dozmar/react-native-opentelemetry
 
 # Используя yarn
-yarn add @react-native-community/opentelemetry
+yarn add @dozmar/react-native-opentelemetry
 
 ```
 
@@ -38,7 +38,7 @@ npm install react-native-device-info
 ### 1. Оберните ваше приложение в провайдер
 
 ```tsx
-import { OpenTelemetryProvider } from "@react-native-community/opentelemetry";
+import { OpenTelemetryProvider } from "@dozmar/react-native-opentelemetry";
 import { App } from "./App";
 
 export default function Root() {
@@ -59,7 +59,7 @@ export default function Root() {
 ### 2. Используйте хук для доступа к tracer
 
 ```tsx
-import { useOpenTelemetry, trace } from "@react-native-community/opentelemetry";
+import { useOpenTelemetry, trace } from "@dozmar/react-native-opentelemetry";
 
 function MyComponent() {
   const { initialized, getTracer } = useOpenTelemetry();
@@ -159,7 +159,7 @@ interface OpenTelemetryConfig {
 #### Создание кастомных трейсов
 
 ```tsx
-import { trace } from "@react-native-community/opentelemetry";
+import { trace } from "@dozmar/react-native-opentelemetry";
 
 function performOperation() {
   const tracer = trace.getTracer("my-tracer");
