@@ -3,7 +3,6 @@ name: Release
 on:
   push:
     branches:
-      - main
       - release/**
     tags:
       - "v*"
@@ -71,19 +70,22 @@ jobs:
           git push origin "v${{ steps.package_version.outputs.version }}"
 
       - name: Publish to NPM
+        id: publish_npm
         if: steps.check_tag.outputs.exists == 'false'
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
-        if: steps.check_tag.outputs.exists == 'false'
+        if: steps.check_tag.outputs.exists == 'false' && steps.publish_npm.outcome == 'success'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.package_version.outputs.version }}
           name: Release v${{ steps.package_version.outputs.version }}
           body: |
             ## Changes in v${{ steps.package_version.outputs.version }}
+            
+            Published to npm: https://www.npmjs.com/package/@dozmar/react-native-opentelemetry/v/${{ steps.package_version.outputs.version }}
             
             See [CHANGELOG.md](CHANGELOG.md) for details.
           draft: false
