@@ -9,7 +9,6 @@
 .vscode/
 jsconfig.json
 .cursor/
-.yarn/
 
 # Xcode
 #
