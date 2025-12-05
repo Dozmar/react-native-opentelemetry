@@ -45,20 +45,28 @@ jobs:
         id: package_version
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch all tags
+        run: git fetch --tags
+
       - name: Check if tag exists
         id: check_tag
         run: |
           if git rev-parse "v${{ steps.package_version.outputs.version }}" >/dev/null 2>&1; then
             echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag v${{ steps.package_version.outputs.version }} already exists, skipping tag creation"
           else
             echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag v${{ steps.package_version.outputs.version }} does not exist, will create"
           fi
 
       - name: Create Git Tag
-        if: steps.check_tag.outputs.exists == 'false' && github.event_name != 'push' || github.ref_type != 'tag'
+        if: steps.check_tag.outputs.exists == 'false' && (github.event_name != 'push' || github.ref_type != 'tag')
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a "v${{ steps.package_version.outputs.version }}" -m "Release v${{ steps.package_version.outputs.version }}"
           git push origin "v${{ steps.package_version.outputs.version }}"
 
