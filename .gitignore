@@ -84,3 +84,8 @@ android/generated
 
 # React Native Nitro Modules
 nitrogen/
+
+# Docker Compose для локального тестирования
+docker-compose.yml
+otel-collector-config.yaml
+

@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    typecheck:
+      run: yarn typecheck
+      stage_fixed: true
+    lint:
+      run: yarn lint
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    commitlint:
+      run: yarn commitlint --edit {1}

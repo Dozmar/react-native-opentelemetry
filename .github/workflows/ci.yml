@@ -1,70 +1,36 @@
 name: CI
+
 on:
   push:
-    branches:
-      - main
+    branches: [main, master, develop]
   pull_request:
-    branches:
-      - main
-  merge_group:
-    types:
-      - checks_requested
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [main, master, develop]
 
 jobs:
-  lint:
+  lint-and-typecheck:
+    name: Lint and TypeCheck
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup
-        uses: ./.github/actions/setup
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
+      - name: Enable Corepack
+        run: corepack enable
 
-      - name: Typecheck files
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Biome linter
+        run: yarn lint
+
+      - name: Run TypeScript type check
         run: yarn typecheck
 
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Run unit tests
-        run: yarn test --maxWorkers=2 --coverage
-
-  build-library:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Build package
-        run: yarn prepare
-
-  build-web:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Build example for Web
-        run: |
-          yarn example expo export --platform web
+      - name: Run tests
+        run: yarn test

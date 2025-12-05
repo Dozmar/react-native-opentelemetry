@@ -1,113 +1,132 @@
 {
-  "name": "react-native-community-opentelemetry",
-  "version": "0.1.0",
-  "description": "OpenTelemetry integration for React Native",
-  "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
-  "exports": {
-    ".": {
-      "source": "./src/index.tsx",
-      "types": "./lib/typescript/src/index.d.ts",
-      "default": "./lib/module/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "src",
-    "lib",
-    "android",
-    "ios",
-    "cpp",
-    "*.podspec",
-    "react-native.config.js",
-    "!ios/build",
-    "!android/build",
-    "!android/gradle",
-    "!android/gradlew",
-    "!android/gradlew.bat",
-    "!android/local.properties",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__",
-    "!**/.*"
-  ],
-  "scripts": {
-    "example": "yarn workspace react-native-community-opentelemetry-example",
-    "clean": "del-cli lib",
-    "prepare": "bob build",
-    "typecheck": "tsc",
-    "test": "jest"
-  },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/react-native-community/react-native-community-opentelemetry.git"
-  },
-  "author": "React Native Community <community@reactnative.dev> (https://github.com/react-native-community)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/react-native-community/react-native-community-opentelemetry/issues"
-  },
-  "homepage": "https://github.com/react-native-community/react-native-community-opentelemetry#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "devDependencies": {
-    "@react-native/babel-preset": "0.81.1",
-    "@types/jest": "^29.5.14",
-    "@types/react": "^19.1.12",
-    "del-cli": "^6.0.0",
-    "jest": "^29.7.0",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-builder-bob": "^0.40.16",
-    "typescript": "^5.9.2"
-  },
-  "peerDependencies": {
-    "react": "*",
-    "react-native": "*"
-  },
-  "workspaces": [
-    "example"
-  ],
-  "packageManager": "yarn@4.11.0",
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      [
-        "module",
-        {
-          "esm": true
-        }
-      ],
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
-    ]
-  },
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
-  },
-  "create-react-native-library": {
-    "packageName": "@react-native-community/opentelemetry",
-    "type": "library",
-    "languages": "js",
-    "tools": [
-      "jest"
-    ],
-    "skipInstall": true,
-    "version": "0.55.1"
-  }
+	"name": "@dozmar/react-native-opentelemetry",
+	"version": "1.0.0",
+	"description": "OpenTelemetry integration for React Native",
+	"main": "./lib/module/index.js",
+	"types": "./lib/typescript/src/index.d.ts",
+	"exports": {
+		".": {
+			"source": "./src/index.ts",
+			"types": "./lib/typescript/src/index.d.ts",
+			"default": "./lib/module/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"src",
+		"lib",
+		"android",
+		"ios",
+		"cpp",
+		"*.podspec",
+		"react-native.config.js",
+		"!ios/build",
+		"!android/build",
+		"!android/gradle",
+		"!android/gradlew",
+		"!android/gradlew.bat",
+		"!android/local.properties",
+		"!**/__tests__",
+		"!**/__fixtures__",
+		"!**/__mocks__",
+		"!**/.*"
+	],
+	"scripts": {
+		"example": "yarn workspace react-native-opentelemetry-example",
+		"clean": "del-cli lib",
+		"typecheck": "tsc",
+		"test": "jest",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"format": "biome format --write .",
+		"prepare": "lefthook install && bob build"
+	},
+	"keywords": [
+		"react-native",
+		"ios",
+		"android"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Dozmar/react-native-opentelemetry.git"
+	},
+	"author": "Dozmar <Lizard382@gmail.com> (https://github.com/Dozmar)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Dozmar/react-native-opentelemetry/issues"
+	},
+	"homepage": "https://github.com/Dozmar/react-native-opentelemetry#readme",
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.8",
+		"@commitlint/cli": "^20.2.0",
+		"@commitlint/config-conventional": "^20.2.0",
+		"@react-native/babel-preset": "0.81.1",
+		"@types/jest": "^29.5.14",
+		"@types/react": "^19.1.12",
+		"del-cli": "^6.0.0",
+		"jest": "^29.7.0",
+		"lefthook": "^2.0.8",
+		"react": "19.1.0",
+		"react-native": "0.81.5",
+		"react-native-builder-bob": "0.29.0",
+		"typescript": "^5.9.2"
+	},
+	"peerDependencies": {
+		"react": "*",
+		"react-native": "*"
+	},
+	"workspaces": [
+		"example"
+	],
+	"packageManager": "yarn@4.11.0",
+	"react-native-builder-bob": {
+		"source": "src",
+		"output": "lib",
+		"targets": [
+			[
+				"module",
+				{
+					"esm": true
+				}
+			],
+			[
+				"typescript",
+				{
+					"project": "tsconfig.build.json"
+				}
+			]
+		]
+	},
+	"jest": {
+		"preset": "react-native",
+		"modulePathIgnorePatterns": [
+			"<rootDir>/example/node_modules",
+			"<rootDir>/lib/"
+		]
+	},
+	"create-react-native-library": {
+		"packageName": "@react-native-community/opentelemetry",
+		"type": "library",
+		"languages": "js",
+		"tools": [
+			"jest"
+		],
+		"skipInstall": true,
+		"version": "0.55.1"
+	},
+	"dependencies": {
+		"@opentelemetry/api": "^1.9.0",
+		"@opentelemetry/core": "^2.2.0",
+		"@opentelemetry/exporter-trace-otlp-http": "^0.208.0",
+		"@opentelemetry/instrumentation": "^0.208.0",
+		"@opentelemetry/instrumentation-fetch": "^0.208.0",
+		"@opentelemetry/instrumentation-xml-http-request": "^0.208.0",
+		"@opentelemetry/resources": "^2.2.0",
+		"@opentelemetry/sdk-trace-base": "^2.2.0",
+		"@opentelemetry/sdk-trace-web": "^2.2.0",
+		"@opentelemetry/semantic-conventions": "^1.38.0"
+	}
 }
